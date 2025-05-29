@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Lock, CheckCircle, AlertCircle } from "lucide-react";
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token") || "";
@@ -157,7 +157,7 @@ export default function ResetPasswordPage() {
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
             <Link href="/" className="text-2xl font-bold text-primary">
-              Cozy Home
+              Mobilier Personalizat
             </Link>
             <CheckCircle className="mx-auto mt-6 h-16 w-16 text-green-500" />
             <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
@@ -191,7 +191,7 @@ export default function ResetPasswordPage() {
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
             <Link href="/" className="text-2xl font-bold text-primary">
-              Cozy Home
+              Mobilier Personalizat
             </Link>
             <AlertCircle className="mx-auto mt-6 h-16 w-16 text-red-500" />
             <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
@@ -232,7 +232,7 @@ export default function ResetPasswordPage() {
         {/* Header */}
         <div className="text-center">
           <Link href="/" className="text-2xl font-bold text-primary">
-            Cozy Home
+            Mobilier Personalizat
           </Link>
           <Lock className="mx-auto mt-6 h-16 w-16 text-primary" />
           <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
@@ -390,5 +390,22 @@ export default function ResetPasswordPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+            <p className="mt-2 text-gray-600">Se încarcă...</p>
+          </div>
+        </div>
+      }
+    >
+      <ResetPasswordForm />
+    </Suspense>
   );
 }
