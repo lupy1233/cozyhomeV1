@@ -158,7 +158,7 @@ export default function HowItWorks() {
             personalizate de la producătorii noștri verificați.
           </p>
           <Button size="lg" asChild>
-            <Link href="/rfq/new">Începe o Cerere</Link>
+            <Link href="/rfq/create">Începe o Cerere</Link>
           </Button>
         </div>
       </div>
