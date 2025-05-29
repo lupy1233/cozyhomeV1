@@ -1,4 +1,12 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Caracteristici | Mobilier Personalizat România",
+  description:
+    "Descoperă caracteristicile platformei noastre care te ajută să găsești cel mai bun mobilier personalizat din România.",
+};
 
 export default function FeaturesPage() {
   return (
@@ -7,11 +15,11 @@ export default function FeaturesPage() {
       <section className="py-24 px-4 bg-muted/50">
         <div className="container mx-auto text-center">
           <h1 className="text-4xl font-bold tracking-tight sm:text-6xl mb-6">
-            Powerful Features for Your Smart Home
+            Caracteristici Puternice pentru Mobilierul Tău
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover how Cozy Home can transform your living space with our
-            comprehensive suite of smart home features.
+            Descoperă cum platforma noastră poate transforma procesul de găsire
+            a mobilierului personalizat perfect pentru casa ta.
           </p>
         </div>
       </section>
@@ -20,88 +28,93 @@ export default function FeaturesPage() {
       <section className="py-24 px-4">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Smart Automation */}
+            {/* RFQ System */}
             <div className="p-6 rounded-lg border">
-              <h3 className="text-xl font-semibold mb-4">Smart Automation</h3>
+              <h3 className="text-xl font-semibold mb-4">Sistem RFQ Avansat</h3>
               <p className="text-muted-foreground mb-4">
-                Automate your home's systems with intelligent scheduling and
-                triggers.
+                Creează cereri detaliate pentru mobilierul dorit cu ușurință.
               </p>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Custom automation rules</li>
-                <li>• Time-based schedules</li>
-                <li>• Location-based triggers</li>
-                <li>• Device interactions</li>
+                <li>• Întrebări dinamice personalizate</li>
+                <li>• Încărcare imagini de referință</li>
+                <li>• Specificații detaliate</li>
+                <li>• Urmărire progres</li>
               </ul>
             </div>
 
-            {/* Energy Management */}
+            {/* Manufacturer Network */}
             <div className="p-6 rounded-lg border">
-              <h3 className="text-xl font-semibold mb-4">Energy Management</h3>
+              <h3 className="text-xl font-semibold mb-4">
+                Rețea de Producători
+              </h3>
               <p className="text-muted-foreground mb-4">
-                Monitor and optimize your home's energy consumption.
+                Acces la cei mai buni producători de mobilier din România.
               </p>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Real-time energy monitoring</li>
-                <li>• Usage analytics</li>
-                <li>• Energy-saving recommendations</li>
-                <li>• Cost tracking</li>
+                <li>• Producători verificați</li>
+                <li>• Portofolii complete</li>
+                <li>• Evaluări și recenzii</li>
+                <li>• Certificări de calitate</li>
               </ul>
             </div>
 
-            {/* Security */}
+            {/* Offer Comparison */}
             <div className="p-6 rounded-lg border">
-              <h3 className="text-xl font-semibold mb-4">Security</h3>
+              <h3 className="text-xl font-semibold mb-4">Comparare Oferte</h3>
               <p className="text-muted-foreground mb-4">
-                Keep your home safe with advanced security features.
+                Compară ofertele primite pentru a lua cea mai bună decizie.
               </p>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Smart door locks</li>
-                <li>• Security cameras</li>
-                <li>• Motion sensors</li>
-                <li>• Remote monitoring</li>
+                <li>• Comparare preț și calitate</li>
+                <li>• Timp de livrare</li>
+                <li>• Materiale utilizate</li>
+                <li>• Garanții oferite</li>
               </ul>
             </div>
 
-            {/* Voice Control */}
+            {/* Communication */}
             <div className="p-6 rounded-lg border">
-              <h3 className="text-xl font-semibold mb-4">Voice Control</h3>
+              <h3 className="text-xl font-semibold mb-4">Comunicare Directă</h3>
               <p className="text-muted-foreground mb-4">
-                Control your home with simple voice commands.
+                Comunică direct cu producătorii pentru detalii suplimentare.
               </p>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Amazon Alexa integration</li>
-                <li>• Google Assistant support</li>
-                <li>• Custom voice commands</li>
-                <li>• Multi-room audio</li>
+                <li>• Mesagerie integrată</li>
+                <li>• Partajare documente</li>
+                <li>• Programare întâlniri</li>
+                <li>• Suport în timp real</li>
               </ul>
             </div>
 
-            {/* Climate Control */}
+            {/* Project Management */}
             <div className="p-6 rounded-lg border">
-              <h3 className="text-xl font-semibold mb-4">Climate Control</h3>
+              <h3 className="text-xl font-semibold mb-4">
+                Gestionare Proiecte
+              </h3>
               <p className="text-muted-foreground mb-4">
-                Maintain the perfect temperature in every room.
+                Urmărește progresul proiectului tău pas cu pas.
               </p>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Smart thermostats</li>
-                <li>• Zone control</li>
-                <li>• Humidity monitoring</li>
-                <li>• Air quality sensors</li>
+                <li>• Status în timp real</li>
+                <li>• Milestone-uri importante</li>
+                <li>• Notificări automate</li>
+                <li>• Istoric complet</li>
               </ul>
             </div>
 
-            {/* Lighting */}
+            {/* Quality Assurance */}
             <div className="p-6 rounded-lg border">
-              <h3 className="text-xl font-semibold mb-4">Smart Lighting</h3>
+              <h3 className="text-xl font-semibold mb-4">
+                Asigurarea Calității
+              </h3>
               <p className="text-muted-foreground mb-4">
-                Create the perfect ambiance with intelligent lighting.
+                Garantăm calitatea prin verificări riguroase.
               </p>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Color control</li>
-                <li>• Scene presets</li>
-                <li>• Motion activation</li>
-                <li>• Energy-efficient LEDs</li>
+                <li>• Verificare producători</li>
+                <li>• Control calitate materiale</li>
+                <li>• Inspecții intermediare</li>
+                <li>• Garanție extinsă</li>
               </ul>
             </div>
           </div>
@@ -112,13 +125,15 @@ export default function FeaturesPage() {
       <section className="py-24 px-4 bg-muted/50">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-bold mb-6">
-            Ready to Transform Your Home?
+            Gata să Îți Transformi Casa?
           </h2>
           <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Experience the future of home automation with Cozy Home's
-            comprehensive features.
+            Experimentează viitorul mobilierului personalizat cu
+            caracteristicile comprehensive ale platformei noastre.
           </p>
-          <Button size="lg">Get Started Today</Button>
+          <Button asChild size="lg">
+            <Link href="/register">Începe Acum</Link>
+          </Button>
         </div>
       </section>
     </main>

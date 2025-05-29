@@ -4,35 +4,35 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us | Cozy Home",
+  title: "Despre Noi | Mobilier Personalizat România",
   description:
-    "Learn about Cozy Home's mission, values, and the team behind your perfect home companion.",
+    "Aflați despre misiunea noastră de a conecta proprietarii de case cu cei mai buni producători de mobilier din România.",
 };
 
 const team = [
   {
-    name: "Sarah Johnson",
-    role: "CEO & Founder",
-    image: "/team/sarah.jpg",
-    bio: "With over 15 years of experience in smart home technology, Sarah founded Cozy Home to make home automation accessible to everyone.",
+    name: "Maria Popescu",
+    role: "CEO & Fondator",
+    image: "/placeholder-avatar.svg",
+    bio: "Cu peste 15 ani de experiență în industria mobilierului, Maria a fondat platforma pentru a face mobilierul personalizat accesibil tuturor.",
   },
   {
-    name: "Michael Chen",
-    role: "CTO",
-    image: "/team/michael.jpg",
-    bio: "Michael leads our technical innovation, bringing his expertise in IoT and machine learning to create smarter, more intuitive home solutions.",
+    name: "Alexandru Ionescu",
+    role: "Director Tehnic",
+    image: "/placeholder-avatar.svg",
+    bio: "Alexandru conduce inovația tehnică, aducând expertiza sa în dezvoltarea platformelor digitale pentru industria mobilierului.",
   },
   {
-    name: "Emily Rodriguez",
-    role: "Head of Product",
-    image: "/team/emily.jpg",
-    bio: "Emily ensures our products meet the highest standards of user experience and functionality, drawing from her background in UX design.",
+    name: "Elena Dumitrescu",
+    role: "Director Produs",
+    image: "/placeholder-avatar.svg",
+    bio: "Elena se asigură că produsele noastre îndeplinesc cele mai înalte standarde de experiență utilizator și funcționalitate.",
   },
   {
-    name: "David Kim",
-    role: "Head of Engineering",
-    image: "/team/david.jpg",
-    bio: "David oversees our engineering team, focusing on creating reliable and scalable solutions for smart home automation.",
+    name: "Andrei Radu",
+    role: "Director Inginerie",
+    image: "/placeholder-avatar.svg",
+    bio: "Andrei supraveghează echipa de inginerie, concentrându-se pe crearea de soluții fiabile pentru marketplace-ul de mobilier.",
   },
 ];
 
@@ -43,11 +43,11 @@ export default function AboutPage() {
       <section className="py-24 px-4 bg-muted/50">
         <div className="container mx-auto text-center">
           <h1 className="text-4xl font-bold tracking-tight sm:text-6xl mb-6">
-            About Cozy Home
+            Despre Mobilier Personalizat România
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            We're on a mission to make smart home technology accessible,
-            intuitive, and beneficial for everyone.
+            Suntem în misiunea de a conecta proprietarii de case cu cei mai buni
+            producători de mobilier personalizat din România.
           </p>
         </div>
       </section>
@@ -57,34 +57,31 @@ export default function AboutPage() {
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold mb-6">Our Story</h2>
+              <h2 className="text-3xl font-bold mb-6">Povestea Noastră</h2>
               <p className="text-muted-foreground mb-4">
-                Founded in 2020, Cozy Home began with a simple idea: make smart
-                home technology accessible to everyone. We noticed that existing
-                solutions were either too complex or too expensive for the
-                average homeowner.
+                Fondată în 2023, platforma noastră a început cu o idee simplă:
+                să facem mobilierul personalizat accesibil tuturor românilor. Am
+                observat că găsirea producătorilor de calitate era dificilă și
+                consumatoare de timp.
               </p>
               <p className="text-muted-foreground mb-4">
-                Our team of experts in IoT, AI, and user experience came
-                together to create a platform that's both powerful and easy to
-                use. We believe that everyone should be able to enjoy the
-                benefits of a smart home, regardless of their technical
-                expertise.
+                Echipa noastră de experți în tehnologie și design a creat o
+                platformă care conectează eficient proprietarii de case cu
+                producătorii de mobilier. Credem că fiecare român merită să aibă
+                mobilierul visurilor sale.
               </p>
               <p className="text-muted-foreground">
-                Today, we're proud to serve thousands of happy customers who
-                have transformed their homes into smarter, more efficient living
-                spaces.
+                Astăzi, suntem mândri să servim sute de clienți mulțumiți care
+                și-au transformat casele cu mobilier personalizat de calitate
+                superioară.
               </p>
             </div>
-            <div className="relative h-[400px] rounded-lg overflow-hidden">
-              <Image
-                src="/about/office.jpg"
-                alt="Cozy Home Office - Our modern workspace where innovation happens"
-                fill
-                className="object-cover"
-                priority
-              />
+            <div className="relative h-[400px] rounded-lg overflow-hidden bg-muted">
+              <div className="flex items-center justify-center h-full">
+                <p className="text-muted-foreground">
+                  Imagine cu biroul nostru
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -93,27 +90,29 @@ export default function AboutPage() {
       {/* Values Section */}
       <section className="py-24 px-4 bg-muted/50">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">Our Values</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">
+            Valorile Noastre
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="p-6 rounded-lg bg-background">
-              <h3 className="text-xl font-semibold mb-4">Innovation</h3>
+              <h3 className="text-xl font-semibold mb-4">Calitate</h3>
               <p className="text-muted-foreground">
-                We constantly push the boundaries of what's possible in home
-                automation, always looking for ways to make our products better.
+                Colaborăm doar cu producătorii de mobilier care respectă cele
+                mai înalte standarde de calitate și artizanat.
               </p>
             </div>
             <div className="p-6 rounded-lg bg-background">
-              <h3 className="text-xl font-semibold mb-4">Accessibility</h3>
+              <h3 className="text-xl font-semibold mb-4">Transparență</h3>
               <p className="text-muted-foreground">
-                We believe smart home technology should be available to
-                everyone, regardless of technical expertise or budget.
+                Oferim transparență completă în procesul de ofertare, fără
+                costuri ascunse sau surprize neplăcute.
               </p>
             </div>
             <div className="p-6 rounded-lg bg-background">
-              <h3 className="text-xl font-semibold mb-4">Sustainability</h3>
+              <h3 className="text-xl font-semibold mb-4">Sustenabilitate</h3>
               <p className="text-muted-foreground">
-                We're committed to creating solutions that help reduce energy
-                consumption and promote sustainable living.
+                Promovăm utilizarea materialelor sustenabile și practicile
+                ecologice în industria mobilierului.
               </p>
             </div>
           </div>
@@ -123,20 +122,19 @@ export default function AboutPage() {
       {/* Team Section */}
       <section className="py-24 px-4">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">Our Team</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">
+            Echipa Noastră
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {team.map((member) => (
               <div key={member.name} className="text-center">
                 <div className="relative w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden">
                   <Image
                     src={member.image}
-                    alt={`${member.name}, ${member.role} at Cozy Home`}
+                    alt={`${member.name}, ${member.role}`}
                     width={192}
                     height={192}
                     className="object-cover"
-                    onError={(e) => {
-                      e.currentTarget.src = "/placeholder-avatar.jpg";
-                    }}
                   />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
@@ -151,13 +149,16 @@ export default function AboutPage() {
       {/* CTA Section */}
       <section className="py-24 px-4 bg-muted/50">
         <div className="container mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">Join Our Journey</h2>
+          <h2 className="text-3xl font-bold mb-6">
+            Alătură-te Misiunii Noastre
+          </h2>
           <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Be part of the future of home automation. We're always looking for
-            talented individuals who share our passion for innovation.
+            Fii parte din viitorul industriei mobilierului în România. Căutăm
+            mereu persoane talentate care împărtășesc pasiunea noastră pentru
+            inovație.
           </p>
           <Button asChild size="lg">
-            <Link href="/careers">View Open Positions</Link>
+            <Link href="/contact">Contactează-ne</Link>
           </Button>
         </div>
       </section>
