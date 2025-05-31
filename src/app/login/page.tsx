@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -10,11 +10,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/contexts/AuthContext";
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/dashboard";
+  const { signIn, isAuthenticated, isLoading: authLoading } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -25,6 +27,30 @@ function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      router.push("/dashboard");
+    }
+  }, [isAuthenticated, authLoading, router]);
+
+  // Show loading while checking auth state
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-2 text-gray-600">Se încarcă...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if authenticated (will redirect)
+  if (isAuthenticated) {
+    return null;
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -42,29 +68,37 @@ function LoginForm() {
     setError("");
 
     try {
-      // TODO: Implement actual login logic
-      console.log("Login attempt:", formData);
+      const { error: signInError } = await signIn(
+        formData.email,
+        formData.password
+      );
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Simulate different error scenarios for demo
-      if (formData.email === "unverified@example.com") {
-        setError(
-          "Please verify your email address before logging in. Check your inbox for a verification link."
-        );
+      if (signInError) {
+        // Handle specific error types
+        if (signInError.message.includes("Invalid login credentials")) {
+          setError(
+            "Email sau parolă incorectă. Vă rugăm să încercați din nou."
+          );
+        } else if (signInError.message.includes("Email not confirmed")) {
+          setError(
+            "Vă rugăm să vă verificați adresa de email înainte de autentificare. Verificați inbox-ul pentru linkul de verificare."
+          );
+        } else {
+          setError(
+            signInError.message ||
+              "A apărut o eroare. Vă rugăm să încercați din nou."
+          );
+        }
         return;
       }
 
-      if (formData.email === "invalid@example.com") {
-        setError("Invalid email or password. Please try again.");
-        return;
-      }
-
-      // Success - redirect to original destination
-      router.push(redirectTo);
+      // Success - wait a moment for auth state to update, then redirect
+      console.log("Login successful, redirecting to:", redirectTo);
+      setTimeout(() => {
+        router.push(redirectTo);
+      }, 500); // Small delay to ensure auth state updates
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      setError("A apărut o eroare neașteptată. Vă rugăm să încercați din nou.");
     } finally {
       setIsLoading(false);
     }
@@ -73,10 +107,13 @@ function LoginForm() {
   const handleGoogleLogin = async () => {
     setIsLoading(true);
     try {
-      // TODO: Implement Google OAuth
-      console.log("Google login");
+      // TODO: Implement Google OAuth with Supabase
+      console.log("Google login - coming soon");
+      setError("Autentificarea cu Google va fi disponibilă în curând.");
     } catch (err) {
-      setError("Failed to login with Google. Please try again.");
+      setError(
+        "Autentificarea cu Google a eșuat. Vă rugăm să încercați din nou."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -85,10 +122,13 @@ function LoginForm() {
   const handleAppleLogin = async () => {
     setIsLoading(true);
     try {
-      // TODO: Implement Apple OAuth
-      console.log("Apple login");
+      // TODO: Implement Apple OAuth with Supabase
+      console.log("Apple login - coming soon");
+      setError("Autentificarea cu Apple va fi disponibilă în curând.");
     } catch (err) {
-      setError("Failed to login with Apple. Please try again.");
+      setError(
+        "Autentificarea cu Apple a eșuat. Vă rugăm să încercați din nou."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -100,7 +140,7 @@ function LoginForm() {
         {/* Header */}
         <div className="text-center">
           <Link href="/" className="text-2xl font-bold text-primary">
-            Mobilier Personalizat
+            Cozy Home
           </Link>
           <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
             Autentificare

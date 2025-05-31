@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface FormData {
   email: string;
@@ -45,6 +46,7 @@ interface ValidationErrors {
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { signUp, isAuthenticated, isLoading: authLoading } = useAuth();
 
   const [formData, setFormData] = useState<FormData>({
     email: "",
@@ -62,6 +64,30 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [generalError, setGeneralError] = useState("");
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      router.push("/dashboard");
+    }
+  }, [isAuthenticated, authLoading, router]);
+
+  // Show loading while checking auth state
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-2 text-gray-600">Se încarcă...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if authenticated (will redirect)
+  if (isAuthenticated) {
+    return null;
+  }
 
   const validatePassword = (password: string): string[] => {
     const errors = [];
@@ -146,24 +172,40 @@ export default function RegisterPage() {
     }
 
     try {
-      // TODO: Implement actual registration logic
-      console.log("Registration attempt:", formData);
+      const { error: signUpError } = await signUp(
+        formData.email,
+        formData.password,
+        {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          phone: formData.phone,
+          role: formData.accountType,
+        }
+      );
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Simulate email already exists error
-      if (formData.email === "existing@example.com") {
-        setGeneralError(
-          "Un cont cu acest email există deja. Încearcă să te autentifici."
-        );
+      if (signUpError) {
+        // Handle specific error types
+        if (signUpError.message.includes("User already registered")) {
+          setGeneralError(
+            "Un cont cu acest email există deja. Încearcă să te autentifici."
+          );
+        } else if (signUpError.message.includes("Password")) {
+          setGeneralError("Parola nu îndeplinește cerințele de securitate.");
+        } else {
+          setGeneralError(
+            signUpError.message ||
+              "A apărut o eroare. Te rugăm să încerci din nou."
+          );
+        }
         return;
       }
 
       // Success - redirect to email verification
       router.push(`/verify-email?email=${encodeURIComponent(formData.email)}`);
     } catch (err) {
-      setGeneralError("A apărut o eroare. Te rugăm să încerci din nou.");
+      setGeneralError(
+        "A apărut o eroare neașteptată. Te rugăm să încerci din nou."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -172,8 +214,9 @@ export default function RegisterPage() {
   const handleGoogleRegister = async () => {
     setIsLoading(true);
     try {
-      // TODO: Implement Google OAuth registration
-      console.log("Google registration");
+      // TODO: Implement Google OAuth registration with Supabase
+      console.log("Google registration - coming soon");
+      setGeneralError("Înregistrarea cu Google va fi disponibilă în curând.");
     } catch (err) {
       setGeneralError(
         "Înregistrarea cu Google a eșuat. Te rugăm să încerci din nou."
@@ -186,8 +229,9 @@ export default function RegisterPage() {
   const handleAppleRegister = async () => {
     setIsLoading(true);
     try {
-      // TODO: Implement Apple OAuth registration
-      console.log("Apple registration");
+      // TODO: Implement Apple OAuth registration with Supabase
+      console.log("Apple registration - coming soon");
+      setGeneralError("Înregistrarea cu Apple va fi disponibilă în curând.");
     } catch (err) {
       setGeneralError(
         "Înregistrarea cu Apple a eșuat. Te rugăm să încerci din nou."

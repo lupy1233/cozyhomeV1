@@ -1,172 +1,60 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Mail, CheckCircle, AlertCircle, Clock } from "lucide-react";
+import { Mail, CheckCircle, AlertCircle, RefreshCw } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 function VerifyEmailForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
-  const token = searchParams.get("token") || "";
+  const { signUp } = useAuth();
 
-  const [verificationCode, setVerificationCode] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [countdown, setCountdown] = useState(0);
 
-  // Auto-verify if token is present in URL
-  useEffect(() => {
-    if (token) {
-      verifyWithToken(token);
-    }
-  }, [token]);
-
-  // Countdown timer for resend button
-  useEffect(() => {
-    if (countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [countdown]);
-
-  const verifyWithToken = async (verificationToken: string) => {
-    setIsLoading(true);
-    setError("");
-
-    try {
-      // TODO: Implement actual token verification
-      console.log("Verifying token:", verificationToken);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Simulate different scenarios
-      if (verificationToken === "expired") {
-        setError(
-          "Linkul de verificare a expirat. Te rugăm să soliciți un nou cod."
-        );
-        return;
-      }
-
-      if (verificationToken === "invalid") {
-        setError(
-          "Linkul de verificare nu este valid. Te rugăm să verifici email-ul sau să soliciți un nou cod."
-        );
-        return;
-      }
-
-      // Success
-      setSuccess(
-        "Email-ul a fost verificat cu succes! Vei fi redirecționat în câteva secunde..."
-      );
-      setTimeout(() => {
-        router.push("/login?verified=true");
-      }, 3000);
-    } catch (err) {
+  const handleResendEmail = async () => {
+    if (!email) {
       setError(
-        "A apărut o eroare la verificarea email-ului. Te rugăm să încerci din nou."
+        "Nu am putut găsi adresa de email. Te rugăm să te înregistrezi din nou."
       );
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleCodeSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!verificationCode.trim()) {
-      setError("Te rugăm să introduci codul de verificare.");
       return;
     }
-
-    setIsLoading(true);
-    setError("");
-
-    try {
-      // TODO: Implement actual code verification
-      console.log("Verifying code:", verificationCode, "for email:", email);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Simulate different scenarios
-      if (verificationCode === "123456") {
-        setSuccess(
-          "Email-ul a fost verificat cu succes! Vei fi redirecționat în câteva secunde..."
-        );
-        setTimeout(() => {
-          router.push("/login?verified=true");
-        }, 3000);
-      } else {
-        setError(
-          "Codul de verificare nu este corect. Te rugăm să încerci din nou."
-        );
-      }
-    } catch (err) {
-      setError(
-        "A apărut o eroare la verificarea codului. Te rugăm să încerci din nou."
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleResendCode = async () => {
-    if (countdown > 0) return;
 
     setIsResending(true);
     setError("");
     setSuccess("");
 
     try {
-      // TODO: Implement actual resend logic
-      console.log("Resending verification code to:", email);
+      // Trigger a new signup to resend confirmation email
+      const { error: resendError } = await signUp(email, "temp_password", {
+        first_name: "Resend",
+        last_name: "Email",
+      });
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      setSuccess(
-        "Un nou cod de verificare a fost trimis la adresa ta de email."
-      );
-      setCountdown(60); // 60 seconds cooldown
+      if (
+        resendError &&
+        !resendError.message.includes("User already registered")
+      ) {
+        setError(
+          "Nu am putut retrimite email-ul. Te rugăm să încerci din nou."
+        );
+      } else {
+        setSuccess(
+          "Email-ul de confirmare a fost retrimis! Verifică inbox-ul."
+        );
+      }
     } catch (err) {
-      setError("Nu am putut retrimite codul. Te rugăm să încerci din nou.");
+      setError("A apărut o eroare. Te rugăm să încerci din nou.");
     } finally {
       setIsResending(false);
     }
   };
-
-  const handleChangeEmail = () => {
-    router.push("/register");
-  };
-
-  if (success) {
-    return (
-      <main className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
-          <div className="text-center">
-            <CheckCircle className="mx-auto h-16 w-16 text-green-500" />
-            <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
-              Email verificat!
-            </h2>
-            <Alert className="mt-6 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
-              <CheckCircle className="h-4 w-4 text-green-600" />
-              <AlertDescription className="text-green-800 dark:text-green-200">
-                {success}
-              </AlertDescription>
-            </Alert>
-          </div>
-        </div>
-      </main>
-    );
-  }
 
   return (
     <main className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -174,7 +62,7 @@ function VerifyEmailForm() {
         {/* Header */}
         <div className="text-center">
           <Link href="/" className="text-2xl font-bold text-primary">
-            Mobilier Personalizat
+            Cozy Home
           </Link>
           <Mail className="mx-auto mt-6 h-16 w-16 text-primary" />
           <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
@@ -183,7 +71,7 @@ function VerifyEmailForm() {
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             {email ? (
               <>
-                Am trimis un cod de verificare la{" "}
+                Am trimis un link de confirmare la{" "}
                 <span className="font-medium text-gray-900 dark:text-white">
                   {email}
                 </span>
@@ -203,7 +91,7 @@ function VerifyEmailForm() {
         )}
 
         {/* Success Alert */}
-        {success && !success.includes("verificat cu succes") && (
+        {success && (
           <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
             <CheckCircle className="h-4 w-4 text-green-600" />
             <AlertDescription className="text-green-800 dark:text-green-200">
@@ -212,84 +100,56 @@ function VerifyEmailForm() {
           </Alert>
         )}
 
-        {/* Verification Form */}
-        {!token && (
-          <form className="mt-8 space-y-6" onSubmit={handleCodeSubmit}>
-            <div>
-              <Label htmlFor="verificationCode">Cod de verificare</Label>
-              <Input
-                id="verificationCode"
-                name="verificationCode"
-                type="text"
-                required
-                value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
-                className="mt-1 text-center text-lg tracking-widest"
-                placeholder="123456"
-                maxLength={6}
-              />
-              <p className="mt-1 text-xs text-gray-500">
-                Introdu codul de 6 cifre din email
-              </p>
-            </div>
-
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Se verifică..." : "Verifică email-ul"}
-            </Button>
-          </form>
-        )}
-
-        {/* Loading state for token verification */}
-        {token && isLoading && (
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              Se verifică email-ul...
-            </p>
-          </div>
-        )}
+        {/* Instructions */}
+        <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+          <h3 className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">
+            Următorii pași:
+          </h3>
+          <ol className="text-sm text-blue-800 dark:text-blue-200 space-y-1 list-decimal list-inside">
+            <li>Verifică inbox-ul pentru email-ul de la Cozy Home</li>
+            <li>Dă click pe linkul de confirmare din email</li>
+            <li>Vei fi redirecționat pentru a te autentifica</li>
+          </ol>
+        </div>
 
         {/* Actions */}
         <div className="space-y-4">
-          {/* Resend Code */}
-          <div className="text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Nu ai primit email-ul?{" "}
-              <button
-                type="button"
-                onClick={handleResendCode}
-                disabled={countdown > 0 || isResending}
-                className="font-medium text-primary hover:text-primary/80 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isResending ? (
-                  "Se retrimite..."
-                ) : countdown > 0 ? (
-                  <>
-                    <Clock className="inline h-3 w-3 mr-1" />
-                    Retrimite în {countdown}s
-                  </>
-                ) : (
-                  "Retrimite codul"
-                )}
-              </button>
-            </p>
-          </div>
-
-          {/* Change Email */}
+          {/* Resend Email */}
           {email && (
             <div className="text-center">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Email greșit?{" "}
-                <button
-                  type="button"
-                  onClick={handleChangeEmail}
-                  className="font-medium text-primary hover:text-primary/80"
-                >
-                  Schimbă adresa de email
-                </button>
-              </p>
+              <Button
+                variant="outline"
+                onClick={handleResendEmail}
+                disabled={isResending}
+                className="w-full"
+              >
+                {isResending ? (
+                  <>
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                    Se retrimite...
+                  </>
+                ) : (
+                  <>
+                    <Mail className="mr-2 h-4 w-4" />
+                    Retrimite email-ul de confirmare
+                  </>
+                )}
+              </Button>
             </div>
           )}
+
+          {/* Change Email */}
+          <div className="text-center">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Email greșit?{" "}
+              <Link
+                href="/register"
+                className="font-medium text-primary hover:text-primary/80"
+              >
+                Înregistrează-te din nou
+              </Link>
+            </p>
+          </div>
 
           {/* Back to Login */}
           <div className="text-center">
@@ -311,7 +171,7 @@ function VerifyEmailForm() {
             <li>• Verifică folderul de spam/junk</li>
             <li>• Verifică că adresa de email este corectă</li>
             <li>• Poate dura până la 5 minute să ajungă</li>
-            <li>• Contactează suportul dacă problema persistă</li>
+            <li>• Folosește butonul "Retrimite" dacă nu ajunge</li>
           </ul>
         </div>
       </div>

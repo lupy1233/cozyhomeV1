@@ -67,6 +67,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     userId: string
   ): Promise<UserProfile | null> => {
     try {
+      console.log("Fetching profile for user:", userId);
+
       const { data, error } = await supabase
         .from("users")
         .select("*")
@@ -75,12 +77,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         console.error("Error fetching user profile:", error);
+
+        // If user doesn't exist in users table, this might be expected for new signups
+        if (error.code === "PGRST116") {
+          console.log(
+            "User profile not found in database - this might be a new user"
+          );
+          return null;
+        }
+
         return null;
       }
 
+      console.log("Profile fetched successfully:", data);
       return data as UserProfile;
     } catch (error) {
-      console.error("Error fetching user profile:", error);
+      console.error("Unexpected error fetching user profile:", error);
       return null;
     }
   };
@@ -203,6 +215,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         if (session?.user && mounted) {
+          console.log("Initial session found:", session.user.email);
           setUser(session.user);
           setSession(session);
 
@@ -210,6 +223,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const profile = await fetchUserProfile(session.user.id);
           if (mounted) {
             setUserProfile(profile);
+            console.log(
+              "Initial profile loaded:",
+              profile?.first_name || profile?.email
+            );
           }
         }
       } catch (error) {
@@ -229,22 +246,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!mounted) return;
 
-      console.log("Auth state changed:", event, session?.user?.id);
+      console.log("Auth state changed:", event, session?.user?.email);
 
       if (session?.user) {
         setUser(session.user);
         setSession(session);
 
-        // Fetch user profile
-        const profile = await fetchUserProfile(session.user.id);
-        setUserProfile(profile);
+        // Fetch user profile with retry logic
+        try {
+          const profile = await fetchUserProfile(session.user.id);
+          if (mounted) {
+            setUserProfile(profile);
+            console.log(
+              "Profile updated:",
+              profile?.first_name || profile?.email
+            );
+          }
+        } catch (error) {
+          console.error("Error fetching profile after auth change:", error);
+        }
       } else {
+        console.log("No session, clearing auth state");
         setUser(null);
         setSession(null);
         setUserProfile(null);
       }
 
-      setIsLoading(false);
+      if (mounted) {
+        setIsLoading(false);
+      }
     });
 
     return () => {
